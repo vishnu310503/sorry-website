@@ -439,15 +439,22 @@ function startFireworks(){
 yesBtn.onclick = ()=>{
 
     const music =
-    document.getElementById("bgMusic");
+document.getElementById("bgMusic");
 
-    music.play();
+music.play();
+
+// keep playing even after page changes
+window.savedMusic = music;
 
     startFireworks();
 
     setTimeout(()=>{
 
         document.body.innerHTML = `
+        <audio id="bgMusic" autoplay loop>
+        <source src="music/until-i-found-you.mp3" type="audio/mpeg">
+        </audio>
+
 
         <div class="success-screen">
 
