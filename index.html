@@ -6,71 +6,71 @@
 <title>Sorry Paila ❤️</title>
 
 <style>
-body{
+
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
     overflow:hidden;
     font-family:'Comic Sans MS', cursive;
-    background:linear-gradient(135deg,#ffd6e0,#fff0f5);
     text-align:center;
+    background:linear-gradient(135deg,#ffd6e0,#fff0f5);
 }
 
 h1{
-    margin-top:120px;
-    font-size:3.5rem;
+    margin-top:90px;
+    font-size:4rem;
     color:#ff4d88;
+    animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-12px);
+    }
 }
 
 p{
+    margin-top:20px;
     color:#555;
     font-size:1.3rem;
 }
 
 button{
+    padding:16px 32px;
+    font-size:18px;
     border:none;
     border-radius:30px;
-    padding:15px 30px;
-    font-size:18px;
     cursor:pointer;
-    transition:.3s;
     box-shadow:0 5px 15px rgba(0,0,0,.2);
 }
 
 #accept{
+    position:absolute;
+    left:38%;
+    top:360px;
     background:#4CAF50;
     color:white;
-    position:absolute;
-    left:40%;
-    top:350px;
+    transition:transform .25s ease;
 }
 
 #deny{
+    position:absolute;
+    left:56%;
+    top:360px;
     background:#ff4d4d;
     color:white;
-    position:absolute;
-    left:55%;
-    top:350px;
-}
-
-.heart{
-    position:absolute;
-    animation:floatUp 5s linear forwards;
-    font-size:24px;
-}
-
-@keyframes floatUp{
-    from{
-        transform:translateY(0);
-        opacity:1;
-    }
-    to{
-        transform:translateY(-100vh);
-        opacity:0;
-    }
 }
 
 #popup{
     position:fixed;
-    top:20px;
+    top:25px;
     left:50%;
     transform:translateX(-50%);
     background:white;
@@ -79,8 +79,37 @@ button{
     box-shadow:0 5px 15px rgba(0,0,0,.2);
     opacity:0;
     transition:.3s;
-    z-index:999;
+    z-index:1000;
     font-size:20px;
+}
+
+.counter{
+    position:fixed;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    background:white;
+    padding:10px 20px;
+    border-radius:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.heart{
+    position:absolute;
+    font-size:24px;
+    animation:floatUp 5s linear forwards;
+}
+
+@keyframes floatUp{
+    from{
+        transform:translateY(0);
+        opacity:1;
+    }
+
+    to{
+        transform:translateY(-110vh);
+        opacity:0;
+    }
 }
 
 canvas{
@@ -96,17 +125,51 @@ canvas{
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    text-align:center;
     padding:20px;
 }
 
+.success-screen img{
+    width:320px;
+    border-radius:20px;
+}
+
 .success-screen h1{
-    margin:10px;
+    margin-top:20px;
 }
 
 .success-screen p{
     max-width:700px;
+    line-height:1.6;
 }
+
+#secretBtn{
+    margin-top:20px;
+    background:#ff4d88;
+    color:white;
+}
+
+@media(max-width:768px){
+
+    h1{
+        font-size:2.5rem;
+        margin-top:80px;
+    }
+
+    p{
+        padding:0 20px;
+    }
+
+    #accept{
+        left:20%;
+        top:340px;
+    }
+
+    #deny{
+        left:55%;
+        top:340px;
+    }
+}
+
 </style>
 </head>
 
@@ -114,148 +177,212 @@ canvas{
 
 <div id="popup"></div>
 
-<h1 id="message">Sorry Paila 😔💖</h1>
+<h1>Sorry Paila 😔💖</h1>
 
 <p>
 I didn't mean to hurt you.<br>
 Can you forgive me? 🥺
 </p>
 
-<button id="accept">Yes, I forgive you 💕</button>
-<button id="deny">No 😡</button>
+<button id="accept">
+Yes, I forgive you 💕
+</button>
+
+<button id="deny">
+No 😡
+</button>
+
+<div class="counter">
+Attempts to press No:
+<span id="attemptCount">0</span>
+</div>
 
 <canvas id="fireworks"></canvas>
 
+<audio id="bgMusic">
+    <source src="music/until-i-found-you.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 
-const denyBtn = document.getElementById("deny");
 const yesBtn = document.getElementById("accept");
+const denyBtn = document.getElementById("deny");
 const popup = document.getElementById("popup");
+const counter = document.getElementById("attemptCount");
 
 let attempts = 0;
 
 const messages = [
+
 "🥺 Please?",
-"😭 I practiced this apology all day.",
-"💖 Come on Paila...",
-"😔 The No button is scared.",
-"💕 Pretty please?",
-"🥹 Just one chance.",
-"💘 The Yes button believes in us.",
-"😭 You're making this difficult.",
-"🌸 Forgiveness looks amazing on you.",
-"💖 Pailaaaa pleaseee.",
-"😩 I am running out of apology moves.",
-"🚨 The No button is considering retirement.",
-"🥹 Look how big the Yes button is getting.",
-"💔 Even my backup apology failed.",
-"😭 Fine... I tried."
+"😭 Wait wait wait...",
+"💖 Hear me out...",
+"😔 That was almost a No.",
+"🥹 You're surprisingly good at this.",
+"💘 The Yes button is getting excited.",
+"😩 Why are you so determined?",
+"🚨 Paila has entered competitive mode.",
+"💔 My apology is fighting for its life.",
+"😭 Fine, I'll make the Yes button bigger.",
+"🫠 This is getting embarrassing.",
+"🥹 Just click Yes already.",
+"💖 We both know where this ends.",
+"😤 Stop chasing the No button.",
+"🎯 Impressive accuracy.",
+"🚨 The No button is requesting backup.",
+"😭 Backup denied.",
+"💘 The Yes button believes in destiny.",
+"🥹 Last chance to be nice.",
+"😤 Are you training for this?",
+"🏃 The No button is tired.",
+"💀 Okay this is personal now.",
+"😭 Please have mercy.",
+"💖 The Yes button is waiting.",
+"🥹 I believe in you.",
+"🚨 Emotional damage detected.",
+"😩 This apology is working overtime.",
+"💘 One click solves everything.",
+"😭 Final warning.",
+"🚨 The No button has resigned."
 ];
 
 function showPopup(text){
+
     popup.innerText = text;
+
     popup.style.opacity = 1;
 
-    setTimeout(()=>{
+    clearTimeout(window.popupTimer);
+
+    window.popupTimer = setTimeout(()=>{
+
         popup.style.opacity = 0;
-    },1500);
+
+    },2500);
 }
+denyBtn.addEventListener("mouseenter",()=>{
 
-document.addEventListener("mousemove",(e)=>{
+    attempts++;
 
-    if(denyBtn.style.display === "none") return;
+    counter.innerText = attempts;
 
-    const rect = denyBtn.getBoundingClientRect();
+    denyBtn.style.left =
+        Math.random() *
+        (window.innerWidth - 180) + "px";
 
-    const distance = Math.hypot(
-        e.clientX - (rect.left + rect.width/2),
-        e.clientY - (rect.top + rect.height/2)
+    denyBtn.style.top =
+        Math.random() *
+        (window.innerHeight - 120) + "px";
+
+    yesBtn.style.transform =
+        `scale(${1 + attempts * 0.18})`;
+
+    showPopup(
+        messages[
+            Math.min(
+                attempts - 1,
+                messages.length - 1
+            )
+        ]
     );
 
-    const triggerDistance = Math.max(
-        150 - attempts * 5,
-        50
-    );
+    if(attempts === 5){
+        denyBtn.innerText = "Maybe 🤔";
+    }
 
-    if(distance < triggerDistance){
+    if(attempts === 10){
+        denyBtn.innerText = "Fine 😭";
+    }
 
-        attempts++;
+    if(attempts === 15){
+        denyBtn.innerText = "Think Again 😏";
+    }
 
-        denyBtn.style.left =
-            Math.random() * (window.innerWidth - 120) + "px";
+    if(attempts === 20){
+        denyBtn.innerText = "Forgive Him ❤️";
+    }
 
-        denyBtn.style.top =
-            Math.random() * (window.innerHeight - 80) + "px";
+    if(attempts === 25){
+        denyBtn.innerText =
+        "You Know You Want To";
+    }
 
-        yesBtn.style.transform =
-            `scale(${1 + attempts * 0.05})`;
+    if(attempts >= 30){
+
+        denyBtn.style.display = "none";
 
         showPopup(
-            messages[
-                Math.min(attempts-1,messages.length-1)
-            ]
+        "🚨 The No button has officially resigned."
         );
-
-        if(attempts === 5){
-            denyBtn.innerText = "Maybe 🤔";
-        }
-
-        if(attempts === 10){
-            denyBtn.innerText = "Fine 😭";
-        }
-
-        if(attempts === 15){
-            denyBtn.style.display = "none";
-            showPopup("🚨 The No button has resigned.");
-        }
     }
+
 });
 
 function createHeart(){
 
-    const heart = document.createElement("div");
+    const heart =
+    document.createElement("div");
 
-    heart.className = "heart";
+    heart.classList.add("heart");
+
     heart.innerHTML = "💖";
 
     heart.style.left =
-        Math.random() * window.innerWidth + "px";
+    Math.random() *
+    window.innerWidth + "px";
 
     heart.style.top =
-        window.innerHeight + "px";
+    window.innerHeight + "px";
 
     document.body.appendChild(heart);
 
     setTimeout(()=>{
+
         heart.remove();
+
     },5000);
 }
 
 setInterval(createHeart,400);
 
-const canvas = document.getElementById("fireworks");
-const ctx = canvas.getContext("2d");
+const canvas =
+document.getElementById("fireworks");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const ctx =
+canvas.getContext("2d");
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
 
 let particles = [];
 
 function createFirework(){
 
     const x =
-        Math.random() * canvas.width;
+    Math.random() *
+    canvas.width;
 
     const y =
-        Math.random() * canvas.height * 0.6;
+    Math.random() *
+    canvas.height * 0.7;
 
-    for(let i=0;i<80;i++){
+    for(let i=0;i<100;i++){
 
         particles.push({
+
             x:x,
+
             y:y,
-            dx:(Math.random()-0.5)*8,
-            dy:(Math.random()-0.5)*8,
+
+            dx:
+            (Math.random()-0.5)*8,
+
+            dy:
+            (Math.random()-0.5)*8,
+
             life:80
         });
     }
@@ -274,9 +401,12 @@ function animateFireworks(){
 
         p.x += p.dx;
         p.y += p.dy;
+
         p.life--;
 
-        ctx.fillStyle = "gold";
+        ctx.fillStyle =
+        "gold";
+
         ctx.fillRect(
             p.x,
             p.y,
@@ -285,8 +415,10 @@ function animateFireworks(){
         );
 
         if(p.life <= 0){
+
             particles.splice(index,1);
         }
+
     });
 
     requestAnimationFrame(
@@ -299,11 +431,17 @@ animateFireworks();
 function startFireworks(){
 
     setInterval(()=>{
+
         createFirework();
+
     },500);
 }
+yesBtn.onclick = ()=>{
 
-yesBtn.onclick = () => {
+    const music =
+    document.getElementById("bgMusic");
+
+    music.play();
 
     startFireworks();
 
@@ -315,10 +453,7 @@ yesBtn.onclick = () => {
 
             <img
             src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif"
-            style="
-            width:300px;
-            border-radius:20px;
-            ">
+            alt="Happy Cat">
 
             <h1>
             🎉 YAYYYYYY 🎉
@@ -334,23 +469,32 @@ yesBtn.onclick = () => {
             </h3>
 
             <p>
-            Thank you for forgiving me.
-            I know I mess up sometimes,
-            but you mean a lot to me.
-            I never want to stop trying
-            to make you smile.
+
+            Thank you for giving me another chance.
+
+            I know saying sorry doesn't magically fix everything.
+
+            But I hope you know hurting you was never my intention.
+
+            My days are always better when you're in them.
+
+            Whether we're laughing,
+            talking,
+            arguing,
+            or doing absolutely nothing.
+
+            Thank you for staying.
+
+            ❤️
+
             </p>
 
-            <button
-            id="secretBtn"
-            style="
-            background:#ff4d88;
-            color:white;
-            ">
+            <button id="secretBtn">
             💌 Open Secret Message
             </button>
 
         </div>
+
         `;
 
         document
@@ -358,18 +502,48 @@ yesBtn.onclick = () => {
         .onclick = ()=>{
 
             alert(
+
 `Dear Paila ❤️
+
+You caught the No button.
+
+You survived the emotional manipulation.
+
+You ignored several professional apologies.
+
+So I guess there's only one thing left to say:
+
+I'm sorry.
+
+Not because this page told me to be.
+
+Not because I got caught.
+
+Because you matter to me.
 
 Thank you for giving me another chance.
 
-You are genuinely one of the most special people in my life and I never want a mistake to make you forget how much I care about you.
+Now please stop being angry at me.
 
-Now please stop being angry at me 😭💖`
+❤️`
+
             );
+
         };
 
     },1200);
+
 };
+
+window.addEventListener("resize",()=>{
+
+    canvas.width =
+    window.innerWidth;
+
+    canvas.height =
+    window.innerHeight;
+
+});
 
 </script>
 
